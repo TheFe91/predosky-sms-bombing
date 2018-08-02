@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    Toast.makeText(ctx, "Need SMS Send Permissions!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, R.string.need_sms_permission, Toast.LENGTH_SHORT).show();
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, REQUEST_SMS);
                 }
             }
@@ -109,9 +109,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     /*
-    TODO: IMPLEMENTARE METODO PER FARE IL BOMBING VERO E PROPRIO
-    TODO: CAPIRE COME CHIAMARE IL SERVIZIO SMS DI ANDROID
-    TODO: SPAMMARE PREDO COME SE NON CI FOSSE 1 DOMANI
-    */
+     * TODO: SPAMMARE PREDO COME SE NON CI FOSSE 1 DOMANI
+     */
 
 }

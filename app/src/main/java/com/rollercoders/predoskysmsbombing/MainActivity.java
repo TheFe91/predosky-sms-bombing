@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private SmsManager smsManager;
     private static int REQUEST_SMS = 0;
     private static int PHONE_STATE = 1;
+    private static int READ_CONTACTS = 2;
     private Context ctx;
 
     @Override
@@ -36,7 +37,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
                     if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-                        bombSMS();
+                        if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                            bombSMS();
+                        }
+                        else {
+                            Toast.makeText(ctx, "Need Contacts Permissions!", Toast.LENGTH_SHORT).show();
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACTS);
+                        }
                     }
                     else {
                         Toast.makeText(ctx, "Need Phone-State Permissions!", Toast.LENGTH_SHORT).show();
@@ -69,6 +76,14 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Permission wasn't granted!", Toast.LENGTH_SHORT).show();
             }
         }
+        else if (requestCode == READ_CONTACTS) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                bombSMS();
+            }
+            else {
+                Toast.makeText(this, "Permission wasn't granted!", Toast.LENGTH_SHORT).show();
+            }
+        }
         else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
@@ -76,12 +91,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void bombSMS() {
         EditText messageObj = findViewById(R.id.smsText);
+        EditText numberObj = findViewById(R.id.smsNumber);
+        String number = numberObj.getText().toString();
         String message = messageObj.getText().toString().replace(" ", "");
         String[] characters = message.split("");
+        number = number.trim();
+        number = "+39" + number; //per ora hardcodato codice Italia, poi gestiamo
         for (String character : characters) {
-            if (!character.equals(""))
-                //JUST FOR DEBUG PURPOSE: INSERT HERE THE ID OF YOUR EMULATOR...AND ENJOY BOMBING ^^
-                smsManager.sendTextMessage("5556", null, character, null, null);
+            if (!character.equals("")) {
+                smsManager.sendTextMessage(number, null, character, null, null);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
     /*

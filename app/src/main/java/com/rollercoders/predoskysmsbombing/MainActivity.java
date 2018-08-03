@@ -2,7 +2,12 @@ package com.rollercoders.predoskysmsbombing;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Debug;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -13,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private static int REQUEST_SMS = 0;
     private static int PHONE_STATE = 1;
     private static int READ_CONTACTS = 2;
+    private final int PICK_CONTACT = 3;
     private Context ctx;
 
     @Override
@@ -31,19 +38,14 @@ public class MainActivity extends AppCompatActivity {
 
         smsManager = SmsManager.getDefault();
         Button go = findViewById(R.id.go);
+        ImageButton chooseContact = findViewById(R.id.contact);
 
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
                     if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-                        if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                            bombSMS();
-                        }
-                        else {
-                            Toast.makeText(ctx, "Need Contacts Permissions!", Toast.LENGTH_SHORT).show();
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACTS);
-                        }
+                        bombSMS();
                     }
                     else {
                         Toast.makeText(ctx, "Need Phone-State Permissions!", Toast.LENGTH_SHORT).show();
@@ -56,6 +58,40 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        chooseContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                    startActivityForResult(intent, PICK_CONTACT);
+                }
+                else {
+                    Toast.makeText(ctx, R.string.need_contacts_permission, Toast.LENGTH_SHORT).show();
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACTS);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_CONTACT && resultCode == RESULT_OK) {
+            try {
+                Uri contactUri = data.getData();
+                assert contactUri != null;
+                Cursor cursor = getContentResolver().query(contactUri, null, null, null, null);
+                assert cursor != null;
+                cursor.moveToFirst();
+                int column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                EditText numberObj = findViewById(R.id.smsNumber);
+                numberObj.setText(cursor.getString(column));
+                cursor.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -108,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     /*
      * TODO: SPAMMARE PREDO COME SE NON CI FOSSE 1 DOMANI
      */

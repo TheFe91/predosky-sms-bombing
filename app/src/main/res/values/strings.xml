@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">Predosky SMS Bombing</string>
     <string name="need_sms_permission">Error: SMS Permission is needed</string>
+    <string name="need_contacts_permission">Error: Contacts Permission is needed</string>
 </resources>

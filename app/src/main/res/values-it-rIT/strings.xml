@@ -2,4 +2,6 @@
 <resources>
     <string name="need_sms_permission">Errore: Il permesso SMS è necessario</string>
     <string name="need_contacts_permission">Errore: il permesso di accedere ai contatti è necessario.</string>
+    <string name="contact">Contattaci</string>
+    <string name="instructions">Immetti numero e messaggio\npoi premi il pulsante rosso</string>
 </resources>

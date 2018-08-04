@@ -2,4 +2,8 @@
     <string name="app_name" translatable="false">Predosky SMS Bombing</string>
     <string name="need_sms_permission">Error: SMS Permission is needed</string>
     <string name="need_contacts_permission">Error: Contacts Permission is needed</string>
+    <string name="tagliabue" translatable="false">Luca Tagliabue</string>
+    <string name="defendenti" translatable="false">Alessandro Defendenti</string>
+    <string name="contact">Contact Us</string>
+    <string name="instructions">Type your number and text and press the Red Button</string>
 </resources>

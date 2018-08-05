@@ -4,4 +4,8 @@
     <string name="need_contacts_permission">Errore: il permesso di accedere ai contatti è necessario.</string>
     <string name="contact">Contattaci</string>
     <string name="instructions">Immetti numero e messaggio\npoi premi il pulsante rosso</string>
+    <string name="alert_title">ATTENZIONE</string>
+    <string name="noticeSMS">Questa App consuma i tuoi sms. Potrebbero essere applicati costi aggiuntivi!</string>
+    <string name="give_consens">Ho capito, continua</string>
+    <string name="deny_consens">Torna indietro</string>
 </resources>

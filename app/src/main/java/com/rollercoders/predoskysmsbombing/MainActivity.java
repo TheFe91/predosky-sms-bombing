@@ -2,7 +2,9 @@ package com.rollercoders.predoskysmsbombing;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,6 +14,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private Context ctx;
     private ProgressBar progressBar;
     private TextView counter, total, splitter;
+    private SharedPreferences sharedPreferences;
+    private boolean consens = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,16 @@ public class MainActivity extends AppCompatActivity {
         counter = findViewById(R.id.counter_pt1);
         splitter = findViewById(R.id.splitter);
         total = findViewById(R.id.counter_pt2);
+
+        sharedPreferences = this.getPreferences(MODE_PRIVATE);
+        consens = sharedPreferences.getBoolean("user consens", false);
+        if (!consens) {
+            setUserConsens();
+        }
+        consens = sharedPreferences.getBoolean("user consens", false);
+        if (!consens) {
+            setUserConsens();
+        }
 
         smsManager = SmsManager.getDefault();
         Button go = findViewById(R.id.go);
@@ -86,6 +101,24 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void setUserConsens() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder
+                .setMessage(R.string.noticeSMS)
+                .setTitle(R.string.alert_title)
+                .setPositiveButton(R.string.give_consens, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("user consens", true);
+                        editor.apply();
+                        consens = true;
+                    }
+                })
+                .setNegativeButton(R.string.deny_consens, null);
+        builder.show();
     }
 
     @Override

@@ -6,4 +6,8 @@
     <string name="defendenti" translatable="false">Alessandro Defendenti</string>
     <string name="contact">Contact Us</string>
     <string name="instructions">Type your number and text and press the Red Button</string>
+    <string name="alert_title">WARNING</string>
+    <string name="noticeSMS">This App consumes your sms. Further costs could be applied!</string>
+    <string name="give_consens">Understood, proceed</string>
+    <string name="deny_consens">Go Back</string>
 </resources>

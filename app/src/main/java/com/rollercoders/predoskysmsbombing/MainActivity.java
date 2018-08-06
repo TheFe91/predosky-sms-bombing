@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView counter, total, splitter;
     private SharedPreferences sharedPreferences;
     private boolean consens = false;
+    private int spammingLag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         smsManager = SmsManager.getDefault();
+        spammingLag = sharedPreferences.getInt("spamming_lag", 500);
         Button go = findViewById(R.id.go);
         ImageButton chooseContact = findViewById(R.id.contact);
 
@@ -224,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                     activity.smsManager.sendTextMessage(number, null, character, null, null);
                     messageCounter++;
                     try {
-                        Thread.sleep(750);
+                        Thread.sleep(activity.spammingLag);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -280,6 +282,11 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.credits:
                 Intent i = new Intent(this, Credits.class);
+                this.startActivity(i);
+                onPause();
+                break;
+            case R.id.settings:
+                i = new Intent(this, Settings.class);
                 this.startActivity(i);
                 onPause();
                 break;

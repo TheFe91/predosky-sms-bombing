@@ -5,7 +5,12 @@
 
     <item
         android:showAsAction="never"
+        android1:id="@+id/settings"
+        android1:title="@string/settings" />
+
+    <item
+        android:showAsAction="never"
         android1:id="@+id/credits"
-        android1:title="Credits" />
+        android1:title="@string/credits" />
 
 </menu>

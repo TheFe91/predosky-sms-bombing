@@ -8,4 +8,8 @@
     <string name="noticeSMS">Questa App consuma i tuoi sms. Potrebbero essere applicati costi aggiuntivi!</string>
     <string name="give_consens">Ho capito, continua</string>
     <string name="deny_consens">Torna indietro</string>
+    <string name="settings">Impostazioni</string>
+    <string name="credits">Crediti</string>
+    <string name="spamming_lag">Ritardo fra gli SMS</string>
+    <string name="confirm">Applica</string>
 </resources>

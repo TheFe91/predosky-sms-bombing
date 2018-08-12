@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Debug;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -43,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView counter, total, splitter;
     private SharedPreferences sharedPreferences;
-    private boolean consens = false;
-    private int spammingLag;
+    private boolean consent = false;
+    public static int spammingLag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +56,8 @@ public class MainActivity extends AppCompatActivity {
         total = findViewById(R.id.counter_pt2);
 
         sharedPreferences = this.getPreferences(MODE_PRIVATE);
-        consens = sharedPreferences.getBoolean("user consens", false);
-        if (!consens) {
-            setUserConsens();
-        }
-        consens = sharedPreferences.getBoolean("user consens", false);
-        if (!consens) {
+        consent = sharedPreferences.getBoolean("user consent", false);
+        if (!consent) {
             setUserConsens();
         }
 
@@ -114,9 +109,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean("user consens", true);
+                        editor.putBoolean("user consent", true);
                         editor.apply();
-                        consens = true;
+                        consent = true;
                     }
                 })
                 .setNegativeButton(R.string.deny_consens, null);
@@ -226,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                     activity.smsManager.sendTextMessage(number, null, character, null, null);
                     messageCounter++;
                     try {
-                        Thread.sleep(activity.spammingLag);
+                        Thread.sleep(spammingLag);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -296,8 +291,17 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    /*
-     * TODO: SPAMMARE PREDO COME SE NON CI FOSSE 1 DOMANI
-     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("spamming_lag", String.valueOf(spammingLag));
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("spamming_lag", spammingLag);
+        editor.apply();
+    }
 }

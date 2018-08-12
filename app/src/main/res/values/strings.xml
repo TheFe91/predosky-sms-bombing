@@ -14,4 +14,7 @@
     <string name="credits">Credits</string>
     <string name="spamming_lag">Lag between SMS</string>
     <string name="confirm">Apply</string>
+    <string name="seekbar_value" translatable="false">%1$d ms</string>
+    <string name="settings_saved">Settings Saved</string>
+    <string name="phone_number">Phone number</string>
 </resources>
